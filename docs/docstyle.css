@@ -1,0 +1,17 @@
+/*Main style sheet for documentation pages.*/
+h1, h2, p {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+ol {
+    margin-top: 0px;
+}
+
+li {
+    margin-bottom: 0.5em;
+}
+
+p.example {
+  text-decoration: underline;
+}
