@@ -8,13 +8,14 @@
   </target>
 
   <!-- Basic jar target. -->
-  <target name="jar">
-    <jar basedir="build/classes" destfile="build/jar/RPG.jar"/>
+  <target name="jar" depends="clean, compile">
+    <jar basedir="build/classes" destfile="build/jar/RPG.jar" manifest="manifest.mf"/>
   </target>
   <!-- Basic clean target. -->
   <target name="clean">
     <delete>
-      <fileset dir="build"/>
+      <fileset dir="build/classes"/>
+      <fileset dir="build/jar"/>
     </delete>
   </target>
 </project>
