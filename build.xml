@@ -1,5 +1,5 @@
 <!-- Build file for text-rpg -->
-<project name="text-rpg" basedir=".">
+<project name="text-rpg" basedir="." default="compile">
   <description>Need a description here</description>
 
   <!-- Basic build target. -->
@@ -7,10 +7,16 @@
     <javac includeantruntime="false" srcdir="src" destdir="build/classes"/>
   </target>
 
+  <!-- Basic test target. -->
+  <target name="test" depends="clean, compile">
+    <java classname="Test" classpath="build/classes"/>
+  </target>
+
   <!-- Basic jar target. -->
   <target name="jar" depends="clean, compile">
     <jar basedir="build/classes" destfile="build/jar/RPG.jar" manifest="manifest.mf"/>
   </target>
+
   <!-- Basic clean target. -->
   <target name="clean">
     <delete>
