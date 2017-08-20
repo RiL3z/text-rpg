@@ -1,20 +1,32 @@
 package game;
 /**
- * This interface defines what all transitions should support. A transition is
- * just what gets displayed in the game when moving from one thing to the next.
+ * A portal is a very general thing that basically teleports the player from
+ * one location to another.
  */
-public abstract class Transition {
-  private String transitionText;
-  
-  public Transition(String transitionText) {
-    this.transitionText = transitionText;
+public class Transition {
+  private String transition;
+  /**
+   * Constructs a new Portal with one location transporting to another.
+   */
+  public Transition(String transition) {
+    this.transition = transition;
   }
 
-  public void setTransitionText(String transitionText) {
-    this.transitionText = transitionText;
+  public void setTransition(String transition) {
+    this.transition = transition;
   }
 
-  public String getTransitionText() {
-    return transitionText;
+  public String getTransition() {
+    return transition;
+  }
+
+  public boolean equals(Object o) {
+    if(o instanceof Transition) {
+      Transition t = (Transition) o;
+      return this.getTransition().equals(t.getTransition());
+    }
+    else {
+      return false;
+    }
   }
 }

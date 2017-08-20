@@ -2,6 +2,8 @@ package game;
 
 import net.datastructures.Graph;
 import net.datastructures.AdjacencyMapGraph;
+import net.datastructures.Vertex;
+import net.datastructures.Edge;
 
 /**
  * Class contains the game world.
@@ -9,17 +11,11 @@ import net.datastructures.AdjacencyMapGraph;
  */
 public class GameWorld extends GameObject {
   private Player p;
-  private Location playerLocation;
-  private Graph<Area, Portal> g = new AdjacencyMapGraph<>(true);
+  private Graph<Area, Transition> g = new AdjacencyMapGraph<>(true);
 
-  public GameWorld(String name, String description, Player p, Graph<Area, Portal> world) {
+  public GameWorld(String name, String description, Player p) {
     super(name, description);
     this.p = p;
-    g = world;
-  }
-
-  public void setPlayerLocation(Location playerLocation) {
-    this.playerLocation = playerLocation;
   }
 
   public void setPlayer(Player p) {
@@ -28,5 +24,13 @@ public class GameWorld extends GameObject {
 
   public Player getPlayer() {
     return p;
+  }
+
+  public Vertex<Area> insertArea(Area area) {
+    return g.insertVertex(area);
+  }
+
+  public Edge<Transition> insertTransition(Vertex<Area> a, Vertex<Area> b, Transition t) {
+    return g.insertEdge(a, b, t);
   }
 }

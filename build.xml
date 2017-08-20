@@ -32,21 +32,24 @@
 
   <!-- Basic test target. -->
   <target name="compile-tests" depends="compile-game">
-    <javac includeantruntime="false" srcdir="${test-src}" destdir="${test-classes}" classpath="${test-lib}:${game-classes}">
+    <javac includeantruntime="false" srcdir="${test-src}" destdir="${test-classes}" classpath="${test-lib}:${game-classes}:${data-lib}">
       <compilerarg value="-Xlint:unchecked"/>
     </javac>
   </target>
 
   <!-- Run tests -->
   <target name="run-tests" depends="compile-tests">
-    <java classpath="${ham-lib}:${test-lib}:${test-classes}:${game-classes}" classname="org.junit.runner.JUnitCore">
+    <java classpath="${ham-lib}:${test-lib}:${data-lib}:${test-classes}:${game-classes}" classname="org.junit.runner.JUnitCore">
       <arg value="test.GameTestSuite"/>
     </java>
   </target>
 
   <!-- Basic jar target. -->
   <target name="jar" depends="clean, compile-game">
-    <jar basedir="${game-classes}" destfile="${jar}/${jar-name}" manifest="manifest.mf"/>
+    <jar destfile="${jar}/${jar-name}" manifest="manifest.mf">
+      <fileset dir="${game-classes}"/>
+      <zipfileset src="${data-lib}"/>
+    </jar>
   </target>
 
   <!-- Basic clean target. -->

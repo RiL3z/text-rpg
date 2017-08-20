@@ -48,4 +48,14 @@ public abstract class GameObject implements Viewable {
   public String view() {
     return getDescription();
   }
+
+  public boolean equals(Object o) {
+    if(o instanceof Location) {
+      Location l = (Location) o;
+      return this.getName().equals(l.getName()) && this.getDescription().equals(l.getDescription());
+    }
+    else {
+      return false;
+    }
+  }
 }

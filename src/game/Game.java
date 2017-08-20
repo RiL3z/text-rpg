@@ -1,5 +1,10 @@
 package game;
 
+import net.datastructures.Graph;
+import net.datastructures.AdjacencyMapGraph;
+import net.datastructures.Vertex;
+import net.datastructures.Edge;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -9,6 +14,8 @@ import java.util.ArrayList;
 public class Game {
   // the gameworld this game refers to
   private GameWorld gw;
+  // game needs a reference to the player
+  private Player p;
   // an array of commands the the game recognizes
   private Command[] commands;
   // words that map to the move action
@@ -33,6 +40,7 @@ public class Game {
     commands = new Command[2];
     commands[0] = new Command(moveWords, Command.Actions.MOVE);
     commands[1] = new Command(viewWords, Command.Actions.VIEW);
+    setupGameWorld();
   }
 
   /**
@@ -70,7 +78,7 @@ public class Game {
     // determine if the user input matched any command
     boolean foundCommand = false;
     Command.Actions action = Command.Actions.NONE;
-    
+
     for(Command c: commands) {
       if(c.recognize(cmd)) {
         foundCommand = true;
@@ -84,7 +92,7 @@ public class Game {
           return "player wants to move";
 
         case VIEW:
-          return "player wants to view";
+          return p.getLocation().getDescription();
         default:
           return "player doesn't want to do anything";
       }
@@ -92,5 +100,23 @@ public class Game {
     else {
       return "invalid command";
     }
+  }
+
+  public void setupGameWorld() {
+    Location l = new Location("bed", "A small twin bed.");
+    p = new Player("Kelan", l);
+    gw = new GameWorld("Test World", "A test world.", p);
+    // first create the graph of areas and transitions
+    Area bedroom = new Area("Bedroom", "A small bedroom with a computer and bookshelf.");
+    Area hallway = new Area("Hallway", "A narrow hallway leading to a kitchen.");
+
+    Transition t1 = new Transition("You move from the bedroom to the kitchen.");
+    Transition t2 = new Transition("You move from the kitche to the bedroom.");
+
+    Vertex<Area> v1 = gw.insertArea(bedroom);
+    Vertex<Area> v2 = gw.insertArea(hallway);
+
+    gw.insertTransition(v1, v2, t1);
+    gw.insertTransition(v2, v1, t2);
   }
 }
