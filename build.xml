@@ -1,20 +1,52 @@
 <!-- Build file for text-rpg -->
 <project name="text-rpg" basedir="." default="compile">
-  <description>Need a description here</description>
+  <description>
+    This is the ant file used to build and test the rpg application that I'm developing.
+  </description>
 
-  <!-- Basic build target. -->
-  <target name="compile">
-    <javac includeantruntime="false" srcdir="src" destdir="build/classes"/>
+  <!-- Properties that can be referred to later in the file. -->
+  <!-- These are evaluated before any target or task. -->
+  <property name="src" location="src"/>
+  <property name="game-src" location="${src}/game"/>
+  <property name="test-src" location="${src}/tests"/>
+  <property name="build" location="build"/>
+  <property name="game-classes" location="${build}/classes"/>
+  <property name="test-classes" location="${build}/tests"/>
+  <property name="jar" location="${build}/jar"/>
+  <property name="lib" location="lib"/>
+  <property name="data-structures" value="data-structures.jar"/>
+  <property name="hamcrest" value="hamcrest-core-1.3.jar"/>
+  <property name="junit" value="junit-4.12.jar"/>
+  <property name="data-lib" location="${lib}/${data-structures}"/>
+  <property name="ham-lib" location="${lib}/${hamcrest}"/>
+  <property name="test-lib" location="${lib}/${junit}"/>
+  <!-- The name that the jar should have. -->
+  <property name="jar-name" value="RPG.jar"/>
+
+  <!-- Basic compile target. -->
+  <target name="compile-game">
+    <javac includeantruntime="false" srcdir="${game-src}" destdir="${game-classes}" classpath="${data-lib}">
+      <compilerarg value="-Xlint:unchecked"/>
+    </javac>
   </target>
 
   <!-- Basic test target. -->
-  <target name="test" depends="clean, compile">
-    <java classname="Test" classpath="build/classes"/>
+  <target name="compile-tests" depends="compile-game">
+    <javac includeantruntime="false" srcdir="${test-src}" destdir="${test-classes}" classpath="${test-lib}:${game-classes}">
+      <compilerarg value="-Xlint:unchecked"/>
+    </javac>
+  </target>
+
+  <!-- Run tests -->
+  <target name="run-tests" depends="compile-tests">
+    <java classpath="${ham-lib}:${test-lib}:${test-classes}:${game-classes}" classname="org.junit.runner.JUnitCore">
+      <arg value="test.GameTestSuite"/>
+    </java>
   </target>
 
   <!-- Basic jar target. -->
-  <target name="jar" depends="clean, compile">
-    <jar basedir="build/classes" destfile="build/jar/RPG.jar" manifest="manifest.mf"/>
+  <target name="jar" depends="clean, compile-game">
+    <jar basedir="${game-classes}" destfile="${jar}/${jar-name}" manifest="manifest.mf"/>
   </target>
 
   <!-- Basic clean target. -->
@@ -22,6 +54,7 @@
     <delete>
       <fileset dir="build/classes"/>
       <fileset dir="build/jar"/>
+      <fileset dir="build/tests"/>
     </delete>
   </target>
 </project>
