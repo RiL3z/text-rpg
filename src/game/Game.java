@@ -22,6 +22,9 @@ public class Game {
   private List<String> moveWords;
   // words that map to the view action
   private List<String> viewWords;
+  // words that indicate the player wants to list all the visible locations
+  // they can go to
+  private List<String> exitWords;
   /**
    * Construct a new game object.
    *
@@ -37,9 +40,11 @@ public class Game {
   private void initCommands() {
     initMoveWords();
     initViewWords();
-    commands = new Command[2];
+    initExitWords();
+    commands = new Command[3];
     commands[0] = new Command(moveWords, Command.Actions.MOVE);
     commands[1] = new Command(viewWords, Command.Actions.VIEW);
+    commands[2] = new Command(exitWords, Command.Actions.EXITS);
     setupGameWorld();
   }
 
@@ -64,6 +69,15 @@ public class Game {
 
     for(String word: words) {
       viewWords.add(word);
+    }
+  }
+
+  private void initExitWords() {
+    String[] words = {"exits", "paths", "ways", "outs"};
+    exitWords = new ArrayList<>();
+
+    for(String word: words) {
+      exitWords.add(word);
     }
   }
 
@@ -93,6 +107,8 @@ public class Game {
 
         case VIEW:
           return p.getLocation().getDescription();
+        case EXITS:
+          return "player is looking for exits";
         default:
           return "player doesn't want to do anything";
       }

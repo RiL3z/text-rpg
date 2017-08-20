@@ -22,6 +22,9 @@
   <property name="test-lib" location="${lib}/${junit}"/>
   <!-- The name that the jar should have. -->
   <property name="jar-name" value="RPG.jar"/>
+  <property name="jar-path" location="${jar}/${jar-name}"/>
+  <property name="dist" location="dist"/>
+  <property name="dist-linux" location="${dist}/linux"/>
 
   <!-- Basic compile target. -->
   <target name="compile-game">
@@ -46,18 +49,29 @@
 
   <!-- Basic jar target. -->
   <target name="jar" depends="clean, compile-game">
-    <jar destfile="${jar}/${jar-name}" manifest="manifest.mf">
+    <jar destfile="${jar-path}" manifest="manifest.mf">
       <fileset dir="${game-classes}"/>
       <zipfileset src="${data-lib}"/>
     </jar>
   </target>
 
+  <!-- Distribute target for linux. -->
+  <target name="dist-linux" depends="jar">
+    <copy file="${jar-path}" todir="${dist-linux}"/>
+  </target>
+
+  <!-- NEED TO FIX AT SOME POINT
+  <target name="run-game" depends="jar">
+    <java jar="${jar}/${jar-name}"/>
+  </target>
+  -->
+
   <!-- Basic clean target. -->
   <target name="clean">
     <delete>
-      <fileset dir="build/classes"/>
-      <fileset dir="build/jar"/>
-      <fileset dir="build/tests"/>
+      <fileset dir="${game-classes}"/>
+      <fileset dir="${jar}"/>
+      <fileset dir="${test-classes}"/>
     </delete>
   </target>
 </project>

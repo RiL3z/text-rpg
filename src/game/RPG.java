@@ -12,13 +12,13 @@ public class RPG {
     //Make sure to refer to this in order to know how to use the console!
     //https://docs.oracle.com/javase/tutorial/essential/io/cl.html
     Console console = System.console();
-    //Get a way to print to the console.
-    PrintWriter pw = console.writer();
     //Something bad happened. We don't have access to the system console.
     if(console == null) {
       //For now, just quit the program.
       return;
     }
+    //Get a way to print to the console.
+    PrintWriter pw = console.writer();
 
     //Create a new game!
     Game game = new Game();
