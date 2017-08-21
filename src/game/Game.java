@@ -95,10 +95,16 @@ public class Game {
     boolean foundCommand = false;
     Command.Actions action = Command.Actions.NONE;
 
-    for(Command c: commands) {
-      if(c.recognize(cmd)) {
-        foundCommand = true;
-        action = c.getAction();
+
+    // find if any word in the input the user sent matches a command
+    String[] words = cmd.split(" ");
+
+    for(String word: words) {
+      for(Command c: commands) {
+        if(c.recognize(word)) {
+          foundCommand = true;
+          action = c.getAction();
+        }
       }
     }
 
