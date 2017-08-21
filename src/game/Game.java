@@ -74,7 +74,7 @@ public class Game {
   }
 
   private void initExitWords() {
-    String[] words = {"exits", "paths", "ways", "outs"};
+    String[] words = {"exits", "paths", "ways", "outs", "out"};
     exitWords = new ArrayList<>();
 
     for(String word: words) {
