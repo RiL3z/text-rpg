@@ -73,6 +73,6 @@ public class Command {
    * @return true if the command is recognized, false if not
    */
   public boolean recognize(String word) {
-    return words.contains(word);
+    return words.contains(word.toLowerCase());
   }
 }

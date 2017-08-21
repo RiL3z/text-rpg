@@ -125,9 +125,20 @@ public class Game {
           }
 
           if(found) {
+            StringBuilder sb = new StringBuilder();
+
             Edge<Transition> edge = gw.getEdge(p.getLocation(), moveVert);
             p.setLocation(moveVert);
-            return edge.getElement().getTransition();
+            // get the location that the player wants to move to
+            Location loc = moveVert.getElement();
+            Transition t = edge.getElement();
+            sb.append(t.getTransition());
+
+            if(!loc.isVisited()) {
+              sb.append("\n" + loc.getDescription());
+              loc.setVisited(true);
+            }
+            return sb.toString();
           }
           else {
             return "That is not a location you can move to.";
