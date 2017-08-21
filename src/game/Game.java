@@ -1,12 +1,13 @@
 package game;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
+
 import net.datastructures.Graph;
 import net.datastructures.AdjacencyMapGraph;
 import net.datastructures.Vertex;
 import net.datastructures.Edge;
-
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * This class should encapsulate the whole game engine.
@@ -81,9 +82,10 @@ public class Game {
     }
   }
 
+  /*
   private void move(Character c, Location l) {
     c.setLocation(l);
-  }
+  }*/
 
   /**
    * the game should decide what to do with the user input here
@@ -106,9 +108,27 @@ public class Game {
           return "player wants to move";
 
         case VIEW:
-          return p.getLocation().getDescription();
+          return p.getLocation().getElement().getDescription();
         case EXITS:
-          return "player is looking for exits";
+          // list all the exits that are available for the player
+          StringBuilder exitList = new StringBuilder("List of exits:\n");
+
+          int i = 0;
+          int outDegree = gw.outDegree(p.getLocation()) - 1;
+
+          for(Edge<Transition> e: gw.outGoingEdges(p.getLocation())) {
+            Vertex<Location>[] endpoints = gw.endVertices(e);
+            Vertex<Location> exit = endpoints[1];
+            if( i != outDegree) {
+              exitList.append(exit.getElement().getName() + "\n");
+            }
+            else {
+              exitList.append(exit.getElement().getName());
+            }
+            i++;
+          }
+
+          return exitList.toString();
         default:
           return "player doesn't want to do anything";
       }
@@ -119,20 +139,26 @@ public class Game {
   }
 
   public void setupGameWorld() {
-    Location l = new Location("bed", "A small twin bed.");
-    p = new Player("Kelan", l);
-    gw = new GameWorld("Test World", "A test world.", p);
+    gw = new GameWorld("Test World", "A test world.");
     // first create the graph of areas and transitions
-    Area bedroom = new Area("Bedroom", "A small bedroom with a computer and bookshelf.");
-    Area hallway = new Area("Hallway", "A narrow hallway leading to a kitchen.");
+    Location bedroom = new Location("Bedroom", "A small bedroom with a computer and bookshelf.");
+    Location hallway = new Location("Hallway", "A narrow hallway leading to a living room and a bedroom");
+    Location livingRoom = new Location("Living Room", "A kitchen and living room.");
 
-    Transition t1 = new Transition("You move from the bedroom to the kitchen.");
-    Transition t2 = new Transition("You move from the kitche to the bedroom.");
+    Transition t1 = new Transition("You move from the bedroom to the hallway.");
+    Transition t2 = new Transition("You move from the hallway to the bedroom.");
+    Transition t3 = new Transition("You move from the hallway to the living room.");
+    Transition t4 = new Transition("You move from the living room to the hallway.");
 
-    Vertex<Area> v1 = gw.insertArea(bedroom);
-    Vertex<Area> v2 = gw.insertArea(hallway);
+    Vertex<Location> v1 = gw.insertLocation(bedroom);
+    Vertex<Location> v2 = gw.insertLocation(hallway);
+    Vertex<Location> v3 = gw.insertLocation(livingRoom);
+
+    p = new Player("Kelan", v2);
 
     gw.insertTransition(v1, v2, t1);
     gw.insertTransition(v2, v1, t2);
+    gw.insertTransition(v2, v3, t3);
+    gw.insertTransition(v3, v2, t4);
   }
 }

@@ -1,12 +1,14 @@
 package game;
+
+import net.datastructures.Vertex;
 /**
  * General class for characters in the game.
  */
 public class Character {
   private String name;
-  private Location loc;
+  private Vertex<Location> loc;
 
-  public Character(String name, Location loc) {
+  public Character(String name, Vertex<Location> loc) {
     this.name = name;
     this.loc = loc;
   }
@@ -19,11 +21,11 @@ public class Character {
     return name;
   }
 
-  public void setLocation(Location loc) {
+  public void setLocation(Vertex<Location> loc) {
     this.loc = loc;
   }
 
-  public Location getLocation() {
+  public Vertex<Location> getLocation() {
     return loc;
   }
 

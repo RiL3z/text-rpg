@@ -9,7 +9,7 @@ import net.datastructures.AdjacencyMapGraph;
  */
 public class Building {
   // create a graph that is directed because there may be one-way paths
-  Graph<Area, String> g = new AdjacencyMapGraph<>(true);
+  Graph<Location, String> g = new AdjacencyMapGraph<>(true);
   public Building() {
 
   }

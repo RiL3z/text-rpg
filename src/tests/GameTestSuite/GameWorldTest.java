@@ -20,18 +20,16 @@ public class GameWorldTest {
 
   @BeforeClass
   public static void setupGameWorld() {
-    Location l = new Location("bed", "A small twin bed.");
-    p = new Player("Kelan", l);
-    gw = new GameWorld("Test World", "A test world.", p);
+    gw = new GameWorld("Test World", "A test world.");
     // first create the graph of areas and transitions
-    Area bedroom = new Area("Bedroom", "A small room with a computer and bookshelf.");
-    Area hallway = new Area("Hallway", "A narrow hallway leading to a kitchen.");
+    Location bedroom = new Location("Bedroom", "A small room with a computer and bookshelf.");
+    Location hallway = new Location("Hallway", "A narrow hallway leading to a kitchen.");
 
     Transition t1 = new Transition("You move from the bedroom to the kitchen.");
     Transition t2 = new Transition("You move from the kitche to the bedroom.");
 
-    Vertex<Area> v1 = gw.insertArea(bedroom);
-    Vertex<Area> v2 = gw.insertArea(hallway);
+    Vertex<Location> v1 = gw.insertLocation(bedroom);
+    Vertex<Location> v2 = gw.insertLocation(hallway);
 
     gw.insertTransition(v1, v2, t1);
     gw.insertTransition(v2, v1, t2);
