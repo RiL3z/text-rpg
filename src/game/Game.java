@@ -104,6 +104,7 @@ public class Game {
         if(c.recognize(word)) {
           foundCommand = true;
           action = c.getAction();
+          break;
         }
       }
     }
@@ -111,7 +112,26 @@ public class Game {
     if(foundCommand) {
       switch(action) {
         case MOVE:
-          return "player wants to move";
+          Vertex<Location>[] outVerts = gw.outGoingVertices(p.getLocation());
+          Vertex<Location> moveVert = null;
+          boolean found = false;
+          for(Vertex<Location> v: outVerts) {
+            Location l = v.getElement();
+            if(cmd.toLowerCase().contains(l.getName().toLowerCase())) {
+              found = true;
+              moveVert = v;
+              break;
+            }
+          }
+
+          if(found) {
+            Edge<Transition> edge = gw.getEdge(p.getLocation(), moveVert);
+            p.setLocation(moveVert);
+            return edge.getElement().getTransition();
+          }
+          else {
+            return "That is not a location you can move to.";
+          }
 
         case VIEW:
           return p.getLocation().getElement().getDescription();
