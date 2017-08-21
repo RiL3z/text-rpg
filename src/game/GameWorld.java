@@ -70,6 +70,24 @@ public class GameWorld extends GameObject {
    }
 
    /**
+    * This method should get an array of all vertices that have edges outgoing
+    * from the given vertex.
+    */
+   public Vertex<Location>[] outGoingVertices(Vertex<Location> v) {
+     Vertex<Location>[] verts = (Vertex<Location>[]) new Vertex[g.outDegree(v)];
+
+     int i = 0;
+     for(Edge<Transition> e: g.outgoingEdges(v)) {
+       Vertex<Location>[] endpoints = g.endVertices(e);
+       Vertex<Location> outV = endpoints[1];
+       verts[i] = outV;
+       i ++;
+     }
+
+     return verts;
+   }
+
+   /**
     * Each area can have a set of characters associated with it.
     */
    public void addCharacter(Character c) {

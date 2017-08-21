@@ -114,18 +114,16 @@ public class Game {
           StringBuilder exitList = new StringBuilder("List of exits:\n");
 
           int i = 0;
-          int outDegree = gw.outDegree(p.getLocation()) - 1;
+          Vertex<Location>[] outVertices = gw.outGoingVertices(p.getLocation());
 
-          for(Edge<Transition> e: gw.outGoingEdges(p.getLocation())) {
-            Vertex<Location>[] endpoints = gw.endVertices(e);
-            Vertex<Location> exit = endpoints[1];
-            if( i != outDegree) {
-              exitList.append(exit.getElement().getName() + "\n");
+          for(Vertex<Location> v: outVertices) {
+            if( i != outVertices.length - 1) {
+              exitList.append(v.getElement().getName() + "\n");
             }
             else {
-              exitList.append(exit.getElement().getName());
+              exitList.append(v.getElement().getName());
             }
-            i++;
+            i ++;
           }
 
           return exitList.toString();
