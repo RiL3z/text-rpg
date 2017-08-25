@@ -86,15 +86,4 @@ public class GameWorld extends GameObject {
 
      return verts;
    }
-
-   /**
-    * Each area can have a set of characters associated with it.
-    */
-   public void addCharacter(Character c) {
-     characters.add(c);
-   }
-
-   public void move(Character c, Vertex<Location> v) {
-     c.setLocation(v);
-   }
 }

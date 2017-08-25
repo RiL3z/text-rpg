@@ -175,7 +175,6 @@ public class Game {
             }
             i ++;
           }
-
           return exitList.toString();
         case QUIT:
           System.out.println("Thanks for playing!");
