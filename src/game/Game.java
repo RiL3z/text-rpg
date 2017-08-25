@@ -26,6 +26,8 @@ public class Game {
   // words that indicate the player wants to list all the visible locations
   // they can go to
   private List<String> exitWords;
+  // words that indicate that the player would like to gracefully quit the game
+  private List<String> quitWords;
   /**
    * Construct a new game object.
    *
@@ -42,10 +44,12 @@ public class Game {
     initMoveWords();
     initViewWords();
     initExitWords();
-    commands = new Command[3];
+    initQuitWords();
+    commands = new Command[4];
     commands[0] = new Command(moveWords, Command.Actions.MOVE);
     commands[1] = new Command(viewWords, Command.Actions.VIEW);
     commands[2] = new Command(exitWords, Command.Actions.EXITS);
+    commands[3] = new Command(quitWords, Command.Actions.QUIT);
     setupGameWorld();
   }
 
@@ -79,6 +83,15 @@ public class Game {
 
     for(String word: words) {
       exitWords.add(word);
+    }
+  }
+
+  public void initQuitWords() {
+    String[] words = {"quit", "stop"};
+    quitWords = new ArrayList<>();
+
+    for(String word: words) {
+      quitWords.add(word);
     }
   }
 
@@ -164,6 +177,9 @@ public class Game {
           }
 
           return exitList.toString();
+        case QUIT:
+          System.out.println("Thanks for playing!");
+          System.exit(0);
         default:
           return "player doesn't want to do anything";
       }

@@ -13,7 +13,7 @@ public class Command {
    * A set of actions that the player may perform over the course of the game.
    */
   public enum Actions {
-    MOVE, VIEW, EXITS, NONE
+    MOVE, VIEW, EXITS, QUIT, NONE
   }
   // A list of words that map to one action
   private List<String> words;
