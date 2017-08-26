@@ -7,10 +7,17 @@ import net.datastructures.Vertex;
 public class Character {
   private String name;
   private Vertex<Location> loc;
+  // every player has an inventory of items they can carry
+  private Inventory inventory = new Inventory();
 
   public Character(String name, Vertex<Location> loc) {
     this.name = name;
     this.loc = loc;
+  }
+
+  // some characters locations may not be known initially
+  public Character(String name) {
+    this.name = name;
   }
 
   public void setName(String name) {
@@ -27,6 +34,14 @@ public class Character {
 
   public Vertex<Location> getLocation() {
     return loc;
+  }
+
+  public Inventory getInventory() {
+    return inventory;
+  }
+
+  public void setInventory(Inventory inventory) {
+    this.inventory = inventory;
   }
 
 }

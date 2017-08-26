@@ -50,9 +50,9 @@ public abstract class GameObject implements Viewable {
   }
 
   public boolean equals(Object o) {
-    if(o instanceof Location) {
-      Location l = (Location) o;
-      return this.getName().equals(l.getName()) && this.getDescription().equals(l.getDescription());
+    if(o instanceof GameObject) {
+      GameObject go = (GameObject) o;
+      return this.getName().equals(go.getName()) && this.getDescription().equals(go.getDescription());
     }
     else {
       return false;

@@ -1,19 +1,27 @@
 package game;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Location extends GameObject {
+  // keep track of whether or not the location has been visited by
+  // the player already or not
+  private boolean visited;
+  // every location has a list of game objects that are inside of it
+  private ArrayList<GameObject> gameObjects = new ArrayList<>();
   /**
    * Constructs a new location
    *
    * @param name the name of the location
    * @param description a description of the location
    */
-
-  // keep track of whether or not the location has been visited by
-  // the player already or not
-  private boolean visited;
-
   public Location(String name, String description) {
     super(name, description);
+  }
+
+  public Location(String name, String description, ArrayList<GameObject> gameObjects) {
+    super(name, description);
+    this.gameObjects = gameObjects;
   }
 
   public void setVisited(boolean visited) {
@@ -22,5 +30,25 @@ public class Location extends GameObject {
 
   public boolean isVisited() {
     return visited;
+  }
+
+  public ArrayList<GameObject> getGameObjects() {
+    return gameObjects;
+  }
+
+  public void setGameObjects(ArrayList<GameObject> gameObjects) {
+    this.gameObjects = gameObjects;
+  }
+
+  // returns the index of the object that goes by a certain name
+  public int indexOfObjectByName(String name) {
+    int index = -1;
+    for(GameObject go: gameObjects) {
+      index ++;
+      if(name.toLowerCase().equals(go.getName().toLowerCase())) {
+        return index;
+      }
+    }
+    return index;
   }
 }

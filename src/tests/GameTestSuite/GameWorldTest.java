@@ -11,7 +11,6 @@ import net.datastructures.Edge;
 import game.GameWorld;
 import game.Location;
 import game.Transition;
-import game.Area;
 import game.Player;
 
 public class GameWorldTest {

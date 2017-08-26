@@ -28,6 +28,8 @@ public class Game {
   private List<String> exitWords;
   // words that indicate that the player would like to gracefully quit the game
   private List<String> quitWords;
+  // words that indicate the player wants to know about objects in the room
+  private List<String> objectsWords;
   /**
    * Construct a new game object.
    *
@@ -35,6 +37,7 @@ public class Game {
    */
   public Game() {
     initCommands();
+    setupGameWorld();
   }
 
   /**
@@ -45,12 +48,13 @@ public class Game {
     initViewWords();
     initExitWords();
     initQuitWords();
-    commands = new Command[4];
+    initObjectsWords();
+    commands = new Command[5];
     commands[0] = new Command(moveWords, Command.Actions.MOVE);
     commands[1] = new Command(viewWords, Command.Actions.VIEW);
     commands[2] = new Command(exitWords, Command.Actions.EXITS);
     commands[3] = new Command(quitWords, Command.Actions.QUIT);
-    setupGameWorld();
+    commands[4] = new Command(objectsWords, Command.Actions.OBJECTS);
   }
 
   /**
@@ -87,11 +91,20 @@ public class Game {
   }
 
   public void initQuitWords() {
-    String[] words = {"quit", "stop"};
+    String[] words = {"quit", "stop", "exit"};
     quitWords = new ArrayList<>();
 
     for(String word: words) {
       quitWords.add(word);
+    }
+  }
+
+  public void initObjectsWords() {
+    String[] words = {"object", "objects", "item", "items", "thing", "things"};
+    objectsWords = new ArrayList<>();
+
+    for(String word: words) {
+      objectsWords.add(word);
     }
   }
 
@@ -124,7 +137,7 @@ public class Game {
 
     if(foundCommand) {
       switch(action) {
-        case MOVE:
+        case MOVE: {
           Vertex<Location>[] outVerts = gw.outGoingVertices(p.getLocation());
           Vertex<Location> moveVert = null;
           boolean found = false;
@@ -156,9 +169,22 @@ public class Game {
           else {
             return "That is not a location you can move to.";
           }
+        }
+        case VIEW: {
+          // try to determine if it's the location description or
+          // an object description that the player wants
+          Location l = p.getLocation().getElement();
+          List<GameObject> locationObjects = l.getGameObjects();
+          for(String word: words) {
+            for(GameObject go: locationObjects) {
+              if(word.toLowerCase().equals(go.getName().toLowerCase())) {
+                return go.getDescription();
+              }
+            }
+          }
 
-        case VIEW:
-          return p.getLocation().getElement().getDescription();
+          return l.getDescription();
+        }
         case EXITS:
           // list all the exits that are available for the player
           StringBuilder exitList = new StringBuilder("List of exits:\n");
@@ -176,6 +202,26 @@ public class Game {
             i ++;
           }
           return exitList.toString();
+        case OBJECTS: {
+          Location l = p.getLocation().getElement();
+          ArrayList<GameObject> locationObjects = l.getGameObjects();
+          if(locationObjects.size() != 0) {
+            StringBuilder objectList = new StringBuilder();
+
+            for(i = 0; i < locationObjects.size(); i ++) {
+              if(i != locationObjects.size() - 1) {
+                objectList.append(locationObjects.get(i).getName() + "\n");
+              }
+              else {
+                objectList.append(locationObjects.get(i).getName());
+              }
+            }
+            return objectList.toString();
+          }
+          else {
+            return "There are no objects in this location.";
+          }
+        }
         case QUIT:
           System.out.println("Thanks for playing!");
           System.exit(0);
@@ -188,10 +234,22 @@ public class Game {
     }
   }
 
+  /*public static int indexOfObjectByName(String[] words, Location loc) {
+    int index = -1;
+    for(String word: words) {
+      index ++;
+      if(loc.containsObjectByName(word)) {
+        return index;
+      }
+    }
+    return index;
+  }*/
+
   public void setupGameWorld() {
-    gw = new GameWorld("Test World", "A test world.");
     // first create the graph of areas and transitions
-    Location bedroom = new Location("Bedroom", "A small bedroom with a computer and bookshelf.");
+    gw = new GameWorld("Test World", "A test world.");
+
+    Location bedroom = new Location("Bedroom", "A small bedroom with a computer and bookshelf.", getBedroomObjects());
     Location hallway = new Location("Hallway", "A narrow hallway leading to a living room and a bedroom");
     Location livingRoom = new Location("Living Room", "A kitchen and living room.");
 
@@ -210,5 +268,18 @@ public class Game {
     gw.insertTransition(v2, v1, t2);
     gw.insertTransition(v2, v3, t3);
     gw.insertTransition(v3, v2, t4);
+  }
+
+  private ArrayList<GameObject> getBedroomObjects() {
+    ArrayList<GameObject> locationItems = new ArrayList<>();
+    Item bed = new Item("Bed", "A small bed meant for a single person.");
+    Item computer = new Item("Computer", "An expensive computer meant for gaming.");
+    Item[] items = {bed, computer};
+
+    for(Item item: items) {
+      locationItems.add(item);
+    }
+
+    return locationItems;
   }
 }
