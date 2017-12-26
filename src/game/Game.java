@@ -177,7 +177,7 @@ public class Game {
           List<GameObject> locationObjects = l.getGameObjects();
           for(String word: words) {
             for(GameObject go: locationObjects) {
-              if(word.toLowerCase().equals(go.getName().toLowerCase())) {
+              if(go.getName().toLowerCase().contains(word.toLowerCase())) {
                 return go.getDescription();
               }
             }
