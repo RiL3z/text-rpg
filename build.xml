@@ -28,6 +28,7 @@
 
   <!-- Basic compile target. -->
   <target name="compile-game">
+    <mkdir dir="${game-classes}"/>
     <javac includeantruntime="false" srcdir="${game-src}" destdir="${game-classes}" classpath="${data-lib}">
       <compilerarg value="-Xlint:unchecked"/>
     </javac>
@@ -35,6 +36,7 @@
 
   <!-- Basic test target. -->
   <target name="compile-tests" depends="compile-game">
+    <mkdir dir="${test-classes}"/>
     <javac includeantruntime="false" srcdir="${test-src}" destdir="${test-classes}" classpath="${test-lib}:${game-classes}:${data-lib}">
       <compilerarg value="-Xlint:unchecked"/>
     </javac>
@@ -49,6 +51,7 @@
 
   <!-- Basic jar target. -->
   <target name="jar" depends="clean, compile-game">
+    <mkdir dir="${jar}"/>
     <jar destfile="${jar-path}" manifest="manifest.mf">
       <fileset dir="${game-classes}"/>
       <zipfileset src="${data-lib}"/>
@@ -68,10 +71,7 @@
 
   <!-- Basic clean target. -->
   <target name="clean">
-    <delete>
-      <fileset dir="${game-classes}"/>
-      <fileset dir="${jar}"/>
-      <fileset dir="${test-classes}"/>
+    <delete dir="${build}" quiet="true">
     </delete>
   </target>
 </project>
