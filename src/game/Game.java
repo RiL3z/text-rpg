@@ -109,14 +109,14 @@ public class Game {
   }
 
   public String view(String cmd) {
-    String[] words = cmd.split(" ");
+    String[] words = cmd.split("\\s+");
     // try to determine if it's the location description or
     // an object description that the player wants
     Location l = p.getLocation().getElement();
     List<GameObject> locationObjects = l.getGameObjects();
     for(String word: words) {
       for(GameObject go: locationObjects) {
-        if(go.getName().toLowerCase().contains(word.toLowerCase())) {
+        if(StringUtilities.contains(go.getName(), word.toLowerCase())) {
           return go.getDescription();
         }
       }
