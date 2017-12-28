@@ -13,8 +13,6 @@ public class Item extends GameObject {
       Item i = (Item) o;
       return super.equals(i);
     }
-    else {
-      return false;
-    }
+    return false;
   }
 }

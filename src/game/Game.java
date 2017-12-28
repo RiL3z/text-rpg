@@ -17,95 +17,15 @@ public class Game {
   private GameWorld gw;
   // game needs a reference to the player
   private Player p;
-  // an array of commands the the game recognizes
-  private Command[] commands;
-  // words that map to the move action
-  private List<String> moveWords;
-  // words that map to the view action
-  private List<String> viewWords;
-  // words that indicate the player wants to list all the visible locations
-  // they can go to
-  private List<String> exitWords;
-  // words that indicate that the player would like to gracefully quit the game
-  private List<String> quitWords;
-  // words that indicate the player wants to know about objects in the room
-  private List<String> objectsWords;
+  // a game needs a GameCommands instance
+  private GameCommands gcs = new GameCommands();
   /**
    * Construct a new game object.
    *
    * @param startLocation the starting location for the player in the game
    */
   public Game() {
-    initCommands();
     setupGameWorld();
-  }
-
-  /**
-   * Method sets up default commands that the game will recognize
-   */
-  private void initCommands() {
-    initMoveWords();
-    initViewWords();
-    initExitWords();
-    initQuitWords();
-    initObjectsWords();
-    commands = new Command[5];
-    commands[0] = new Command(moveWords, Command.Actions.MOVE);
-    commands[1] = new Command(viewWords, Command.Actions.VIEW);
-    commands[2] = new Command(exitWords, Command.Actions.EXITS);
-    commands[3] = new Command(quitWords, Command.Actions.QUIT);
-    commands[4] = new Command(objectsWords, Command.Actions.OBJECTS);
-  }
-
-  /**
-   * method sets up the move word sequence
-   */
-  private void initMoveWords() {
-    String[] words = {"move", "go", "walk", "travel", "run"};
-    moveWords = new ArrayList<>();
-
-    for(String word: words) {
-      moveWords.add(word);
-    }
-  }
-
-  /**
-   * method sets up the view word sequence
-   */
-  private void initViewWords() {
-    String[] words = {"look", "view", "inspect", "observe", "scrutinize"};
-    viewWords = new ArrayList<>();
-
-    for(String word: words) {
-      viewWords.add(word);
-    }
-  }
-
-  private void initExitWords() {
-    String[] words = {"exits", "paths", "ways", "outs", "out"};
-    exitWords = new ArrayList<>();
-
-    for(String word: words) {
-      exitWords.add(word);
-    }
-  }
-
-  public void initQuitWords() {
-    String[] words = {"quit", "stop", "exit"};
-    quitWords = new ArrayList<>();
-
-    for(String word: words) {
-      quitWords.add(word);
-    }
-  }
-
-  public void initObjectsWords() {
-    String[] words = {"object", "objects", "item", "items", "thing", "things"};
-    objectsWords = new ArrayList<>();
-
-    for(String word: words) {
-      objectsWords.add(word);
-    }
   }
 
   /*
@@ -117,120 +37,22 @@ public class Game {
    * the game should decide what to do with the user input here
    */
   public String sendCommand(String cmd) {
-    // determine if the user input matched any command
-    boolean foundCommand = false;
-    Command.Actions action = Command.Actions.NONE;
+    Command.Actions action = gcs.getCommandAction(cmd);
 
-
-    // find if any word in the input the user sent matches a command
-    String[] words = cmd.split(" ");
-
-    for(String word: words) {
-      for(Command c: commands) {
-        if(c.recognize(word)) {
-          foundCommand = true;
-          action = c.getAction();
-          break;
-        }
-      }
-    }
-
-    if(foundCommand) {
-      switch(action) {
-        case MOVE: {
-          Vertex<Location>[] outVerts = gw.outGoingVertices(p.getLocation());
-          Vertex<Location> moveVert = null;
-          boolean found = false;
-          for(Vertex<Location> v: outVerts) {
-            Location l = v.getElement();
-            if(cmd.toLowerCase().contains(l.getName().toLowerCase())) {
-              found = true;
-              moveVert = v;
-              break;
-            }
-          }
-
-          if(found) {
-            StringBuilder sb = new StringBuilder();
-
-            Edge<Transition> edge = gw.getEdge(p.getLocation(), moveVert);
-            p.setLocation(moveVert);
-            // get the location that the player wants to move to
-            Location loc = moveVert.getElement();
-            Transition t = edge.getElement();
-            sb.append(t.getTransition());
-
-            if(!loc.isVisited()) {
-              sb.append("\n" + loc.getDescription());
-              loc.setVisited(true);
-            }
-            return sb.toString();
-          }
-          else {
-            return "That is not a location you can move to.";
-          }
-        }
-        case VIEW: {
-          // try to determine if it's the location description or
-          // an object description that the player wants
-          Location l = p.getLocation().getElement();
-          List<GameObject> locationObjects = l.getGameObjects();
-          for(String word: words) {
-            for(GameObject go: locationObjects) {
-              if(go.getName().toLowerCase().contains(word.toLowerCase())) {
-                return go.getDescription();
-              }
-            }
-          }
-
-          return l.getDescription();
-        }
-        case EXITS:
-          // list all the exits that are available for the player
-          StringBuilder exitList = new StringBuilder("List of exits:\n");
-
-          int i = 0;
-          Vertex<Location>[] outVertices = gw.outGoingVertices(p.getLocation());
-
-          for(Vertex<Location> v: outVertices) {
-            if( i != outVertices.length - 1) {
-              exitList.append(v.getElement().getName() + "\n");
-            }
-            else {
-              exitList.append(v.getElement().getName());
-            }
-            i ++;
-          }
-          return exitList.toString();
-        case OBJECTS: {
-          Location l = p.getLocation().getElement();
-          ArrayList<GameObject> locationObjects = l.getGameObjects();
-          if(locationObjects.size() != 0) {
-            StringBuilder objectList = new StringBuilder();
-
-            for(i = 0; i < locationObjects.size(); i ++) {
-              if(i != locationObjects.size() - 1) {
-                objectList.append(locationObjects.get(i).getName() + "\n");
-              }
-              else {
-                objectList.append(locationObjects.get(i).getName());
-              }
-            }
-            return objectList.toString();
-          }
-          else {
-            return "There are no objects in this location.";
-          }
-        }
-        case QUIT:
-          System.out.println("Thanks for playing!");
-          System.exit(0);
-        default:
-          return "player doesn't want to do anything";
-      }
-    }
-    else {
-      return "invalid command";
+    switch(action) {
+      case MOVE:
+        return move(cmd);
+      case VIEW:
+        return view(cmd);
+      case EXITS:
+        return exits();
+      case OBJECTS:
+        return objects();
+      case QUIT:
+        System.out.println("Thanks for playing!");
+        System.exit(0);
+      default:
+        return "that command is not recognized";
     }
   }
 
@@ -244,6 +66,108 @@ public class Game {
     }
     return index;
   }*/
+
+  public Vertex<Location> determineMoveLocation(String cmd) {
+    Vertex<Location>[] outVerts = gw.outGoingVertices(p.getLocation());
+    Vertex<Location> moveVert = null;
+    for(Vertex<Location> v: outVerts) {
+      Location l = v.getElement();
+      if(StringUtilities.contains(cmd, l.getName())) {
+        moveVert = v;
+        break;
+      }
+    }
+    return moveVert;
+  }
+
+  public String moveString(Vertex<Location> moveVert) {
+    StringBuilder sb = new StringBuilder();
+
+    Edge<Transition> edge = gw.getEdge(p.getLocation(), moveVert);
+    p.setLocation(moveVert);
+    // get the location that the player wants to move to
+    Location loc = moveVert.getElement();
+    Transition t = edge.getElement();
+    sb.append(t.getTransition());
+
+    if(!loc.isVisited()) {
+      sb.append("\n" + loc.getDescription());
+      loc.setVisited(true);
+    }
+    return sb.toString();
+  }
+
+  public String move(String cmd) {
+    Vertex<Location> moveVert = determineMoveLocation(cmd);
+
+    if(moveVert != null) {
+      return moveString(moveVert);
+    }
+    else {
+      return "That is not a location you can move to.";
+    }
+  }
+
+  public String view(String cmd) {
+    String[] words = cmd.split(" ");
+    // try to determine if it's the location description or
+    // an object description that the player wants
+    Location l = p.getLocation().getElement();
+    List<GameObject> locationObjects = l.getGameObjects();
+    for(String word: words) {
+      for(GameObject go: locationObjects) {
+        if(go.getName().toLowerCase().contains(word.toLowerCase())) {
+          return go.getDescription();
+        }
+      }
+    }
+
+    return l.getDescription();
+  }
+
+  public String exits() {
+    // list all the exits that are available for the player
+    StringBuilder exitList = new StringBuilder("List of exits:\n");
+
+    int i = 0;
+    Vertex<Location>[] outVertices = gw.outGoingVertices(p.getLocation());
+
+    for(Vertex<Location> v: outVertices) {
+      if(i != outVertices.length - 1) {
+        exitList.append(v.getElement().getName() + "\n");
+      }
+      else {
+        exitList.append(v.getElement().getName());
+      }
+      i ++;
+    }
+    return exitList.toString();
+  }
+
+  public String objects() {
+    Location l = p.getLocation().getElement();
+    ArrayList<GameObject> locationObjects = l.getGameObjects();
+    if(locationObjects.size() != 0) {
+      StringBuilder objectList = new StringBuilder();
+
+      for(int i = 0; i < locationObjects.size(); i ++) {
+        if(i != locationObjects.size() - 1) {
+          objectList.append(locationObjects.get(i).getName() + "\n");
+        }
+        else {
+          objectList.append(locationObjects.get(i).getName());
+        }
+      }
+      return objectList.toString();
+    }
+    else {
+      return "There are no objects in this location.";
+    }
+  }
+
+  public void quit() {
+
+  }
 
   public void setupGameWorld() {
     // first create the graph of areas and transitions
@@ -273,8 +197,9 @@ public class Game {
   private ArrayList<GameObject> getBedroomObjects() {
     ArrayList<GameObject> locationItems = new ArrayList<>();
     Item bed = new Item("Bed", "A small bed meant for a single person.");
+    Item bed1 = new Item("Big Bed", "A BIG bed meant for whole bunches of people.");
     Item computer = new Item("Computer", "An expensive computer meant for gaming.");
-    Item[] items = {bed, computer};
+    Item[] items = {bed, bed1, computer};
 
     for(Item item: items) {
       locationItems.add(item);

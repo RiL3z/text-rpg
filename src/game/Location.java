@@ -36,6 +36,17 @@ public class Location extends GameObject {
     return gameObjects;
   }
 
+  // specifically get the items in the room
+  public ArrayList<Item> getItems() {
+    ArrayList<Item> items = new ArrayList<>();
+    for(GameObject go: gameObjects) {
+      if(go instanceof Item) {
+        items.add((Item) go);
+      }
+    }
+    return items;
+  }
+
   public void setGameObjects(ArrayList<GameObject> gameObjects) {
     this.gameObjects = gameObjects;
   }
@@ -50,5 +61,16 @@ public class Location extends GameObject {
       }
     }
     return index;
+  }
+
+  // remove an item from the gameobjects in the location
+  public Item removeOneItem(Item item) {
+    for(GameObject go: gameObjects) {
+      if(item.equals(go)) {
+        gameObjects.remove(item);
+        return item;
+      }
+    }
+    return null;
   }
 }

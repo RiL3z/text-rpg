@@ -28,7 +28,7 @@ public class Command {
    * @param action an action that the player can perform in the game
    */
   public Command(List<String> words, Actions action) {
-    this.words = words;
+    setWordsPriv(words);
     this.action = action;
   }
 
@@ -38,6 +38,14 @@ public class Command {
    * @param words the list of words that map to an action
    */
   public void setWords(List<String> words) {
+    setWordsPriv(words);
+  }
+
+  private void setWordsPriv(List<String> words) {
+    // make sure to down-case every word provided
+    for(int i = 0; i < words.size(); i ++) {
+      words.add(words.remove(0).toLowerCase());
+    }
     this.words = words;
   }
 

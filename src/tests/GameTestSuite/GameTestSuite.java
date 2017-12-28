@@ -6,8 +6,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   CommandTest.class,
-  GameTest.class,
-  TestArea.class
+  GameCommandsTest.class,
+  StringUtilitiesTest.class
 })
 
 public class GameTestSuite {

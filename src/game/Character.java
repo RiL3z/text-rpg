@@ -44,4 +44,9 @@ public class Character {
     this.inventory = inventory;
   }
 
+  // pick up an item and add it to the inventory of the character
+  public void pickUpItem(String itemName) {
+
+  }
+
 }
