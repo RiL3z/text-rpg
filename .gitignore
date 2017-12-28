@@ -1,2 +1,4 @@
+# ignore class files built with ant
 build
+# ignore any jars output under the dist folder
 dist/**/*.jar
