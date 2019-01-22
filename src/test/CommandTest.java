@@ -14,7 +14,7 @@ public class CommandTest {
 
   @Test
   public void TestGetWords() {
-    List<String> moveWords = new ArrayList<String>();
+    List<String> moveWords = new ArrayList<>();
     // think of some possible ways a player might want to communicate that their
     // character should move
     moveWords.add("mOVE");
@@ -37,7 +37,7 @@ public class CommandTest {
 
   @Test
   public void TestSetWords() {
-    List<String> moveWords = new ArrayList<String>();
+    List<String> moveWords = new ArrayList<>();
     // think of some possible ways a player might want to communicate that their
     // character should move
     moveWords.add("mOVE");
@@ -67,7 +67,7 @@ public class CommandTest {
 
   @Test
   public void TestRecognize1() {
-    List<String> moveWords = new ArrayList<String>();
+    List<String> moveWords = new ArrayList<>();
     // think of some possible ways a player might want to communicate that their
     // character should move
     moveWords.add("mOVE");
@@ -84,7 +84,7 @@ public class CommandTest {
 
   @Test
   public void TestRecognize2() {
-    List<String> moveWords = new ArrayList<String>();
+    List<String> moveWords = new ArrayList<>();
     // think of some possible ways a player might want to communicate that their
     // character should move
     moveWords.add("mOVE");
@@ -101,7 +101,7 @@ public class CommandTest {
 
   @Test
   public void TestRecognize3() {
-    List<String> moveWords = new ArrayList<String>();
+    List<String> moveWords = new ArrayList<>();
     // think of some possible ways a player might want to communicate that their
     // character should move
     moveWords.add("mOVE");
@@ -118,7 +118,7 @@ public class CommandTest {
 
   @Test
   public void TestRecognize4() {
-    List<String> moveWords = new ArrayList<String>();
+    List<String> moveWords = new ArrayList<>();
     // think of some possible ways a player might want to communicate that their
     // character should move
     moveWords.add("mOVE");
@@ -135,7 +135,7 @@ public class CommandTest {
 
   @Test
   public void TestUnRecognized1() {
-    List<String> moveWords = new ArrayList<String>();
+    List<String> moveWords = new ArrayList<>();
     // think of some possible ways a player might want to communicate that their
     // character should move
     moveWords.add("mOVE");
@@ -152,7 +152,7 @@ public class CommandTest {
 
   @Test
   public void TestUnRecognized2() {
-    List<String> moveWords = new ArrayList<String>();
+    List<String> moveWords = new ArrayList<>();
     // think of some possible ways a player might want to communicate that their
     // character should move
     moveWords.add("mOVE");
@@ -169,7 +169,7 @@ public class CommandTest {
 
   @Test
   public void TestUnRecognized3() {
-    List<String> moveWords = new ArrayList<String>();
+    List<String> moveWords = new ArrayList<>();
     // think of some possible ways a player might want to communicate that their
     // character should move
     moveWords.add("mOVE");
@@ -186,7 +186,7 @@ public class CommandTest {
 
   @Test
   public void TestUnRecognized4() {
-    List<String> moveWords = new ArrayList<String>();
+    List<String> moveWords = new ArrayList<>();
     // think of some possible ways a player might want to communicate that their
     // character should move
     moveWords.add("mOVE");

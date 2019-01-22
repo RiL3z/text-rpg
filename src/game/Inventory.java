@@ -7,8 +7,10 @@ import java.util.ArrayList;
  * around.
  */
 public class Inventory {
-  // a list of items a character is keeping in their inventory
-  List<Item> inventory = new ArrayList<Item>();
+  /**
+   * a list of items a character is keeping in their inventory
+   */
+  List<Item> inventory = new ArrayList<>(); // You don't have to have <item>, you can just use <>
   
   public Inventory() {
 

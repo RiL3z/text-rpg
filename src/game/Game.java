@@ -1,9 +1,9 @@
 package game;
 
+// Whats with all the un-used imports? Future refrence to use?
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
-
 import net.datastructures.Graph;
 import net.datastructures.AdjacencyMapGraph;
 import net.datastructures.Vertex;
@@ -22,7 +22,6 @@ public class Game {
   /**
    * Construct a new game object.
    *
-   * @param startLocation the starting location for the player in the game
    */
   public Game() {
     setupGameWorld();
@@ -35,6 +34,8 @@ public class Game {
 
   /**
    * the game should decide what to do with the user input here
+     * @param cmd
+     * @return 
    */
   public String sendCommand(String cmd) {
     Command.Actions action = gcs.getCommandAction(cmd);
@@ -91,7 +92,7 @@ public class Game {
     sb.append(t.getTransition());
 
     if(!loc.isVisited()) {
-      sb.append("\n" + loc.getDescription());
+      sb.append("\n").append(loc.getDescription()); // It didn't like how it previously was, so I hadd to add ".append"
       loc.setVisited(true);
     }
     return sb.toString();
@@ -134,7 +135,7 @@ public class Game {
 
     for(Vertex<Location> v: outVertices) {
       if(i != outVertices.length - 1) {
-        exitList.append(v.getElement().getName() + "\n");
+        exitList.append(v.getElement().getName()).append("\n"); // Added the ".append" method
       }
       else {
         exitList.append(v.getElement().getName());
@@ -147,12 +148,12 @@ public class Game {
   public String objects() {
     Location l = p.getLocation().getElement();
     ArrayList<GameObject> locationObjects = l.getGameObjects();
-    if(locationObjects.size() != 0) {
+    if(!locationObjects.isEmpty()) { // Instead of (locationObjects.size() != 0) I made it (!locationObjects.isEmpty())
       StringBuilder objectList = new StringBuilder();
 
       for(int i = 0; i < locationObjects.size(); i ++) {
         if(i != locationObjects.size() - 1) {
-          objectList.append(locationObjects.get(i).getName() + "\n");
+          objectList.append(locationObjects.get(i).getName()).append("\n"); // Used .append
         }
         else {
           objectList.append(locationObjects.get(i).getName());

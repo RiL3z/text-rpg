@@ -8,9 +8,11 @@ import java.io.PrintWriter;
 
 public class RPG {
   public static void main(String[] args) {
-    //First we need to set up interaction through the console.
-    //Make sure to refer to this in order to know how to use the console!
-    //https://docs.oracle.com/javase/tutorial/essential/io/cl.html
+    /**
+     * First we need to set up interaction through the console.
+     *Make sure to refer to this in order to know how to use the console!
+     *https://docs.oracle.com/javase/tutorial/essential/io/cl.html
+     */
     Console console = System.console();
     //Something bad happened. We don't have access to the system console.
     if(console == null) {

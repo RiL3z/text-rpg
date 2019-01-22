@@ -42,10 +42,15 @@ public class Command {
   }
 
   private void setWordsPriv(List<String> words) {
-    // make sure to down-case every word provided
-    for(int i = 0; i < words.size(); i ++) {
-      words.add(words.remove(0).toLowerCase());
-    }
+      // make sure to down-case every word provided
+      /**
+       * Changed for loop. 
+       * 
+       */
+      for (String word : words)
+      {
+          words.add(words.remove(0).toLowerCase());
+      }
     this.words = words;
   }
 
@@ -78,6 +83,7 @@ public class Command {
 
   /**
    * Gets whether or not the word is recognized as a command.
+     * @param word
    * @return true if the command is recognized, false if not
    */
   public boolean recognize(String word) {

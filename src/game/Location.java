@@ -36,14 +36,23 @@ public class Location extends GameObject {
     return gameObjects;
   }
 
-  // specifically get the items in the room
-  public ArrayList<Item> getItems() {
-    ArrayList<Item> items = new ArrayList<>();
-    for(GameObject go: gameObjects) {
+  // Specifically get the items in the room
+  /**
+   * Changed from:
+   *  for(GameObject go: gameObjects) {
       if(go instanceof Item) {
         items.add((Item) go);
       }
     }
+   * 
+   * @return 
+   */
+  public ArrayList<Item> getItems() {
+    ArrayList<Item> items = new ArrayList<>();
+    gameObjects.stream().filter((go) -> (go instanceof Item)).forEachOrdered((go) -> 
+      {
+          items.add((Item) go);
+      });
     return items;
   }
 

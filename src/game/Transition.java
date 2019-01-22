@@ -1,4 +1,7 @@
 package game;
+
+import java.util.Objects;
+
 /**
  * A portal is a very general thing that basically teleports the player from
  * one location to another.
@@ -19,7 +22,8 @@ public class Transition {
   public String getTransition() {
     return transition;
   }
-
+  
+  @Override // Suggestion from Netbeans
   public boolean equals(Object o) {
     if(o instanceof Transition) {
       Transition t = (Transition) o;

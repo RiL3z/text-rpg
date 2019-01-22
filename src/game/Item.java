@@ -8,6 +8,12 @@ public class Item extends GameObject {
     super(name, description);
   }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
+    @Override // Put an @Override just in case?
   public boolean equals(Object o) {
     if(o instanceof Item) {
       Item i = (Item) o;
