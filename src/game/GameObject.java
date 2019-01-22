@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Objects;
+
 public abstract class GameObject implements Viewable {
   private String name;
   private String description;
@@ -30,7 +32,7 @@ public abstract class GameObject implements Viewable {
   /**
    * Sets the description of the object.
    *
-   * @param name the description of the object
+     * @param description
    */
   public void setDescription(String description) {
     this.description = description;
@@ -45,10 +47,21 @@ public abstract class GameObject implements Viewable {
     return description;
   }
 
+    /**
+     *
+     * @return
+     */
+    @Override
   public String view() {
     return getDescription();
   }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
+    @Override
   public boolean equals(Object o) {
     if(o instanceof GameObject) {
       GameObject go = (GameObject) o;
