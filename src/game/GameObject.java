@@ -58,4 +58,12 @@ public abstract class GameObject implements Viewable {
       return false;
     }
   }
+
+  public String toString() {
+    return String.format("");
+  }
+
+  public String debugString() {
+    return String.format("");
+  }
 }

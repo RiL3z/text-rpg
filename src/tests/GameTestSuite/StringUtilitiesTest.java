@@ -9,6 +9,18 @@ import static org.junit.Assert.assertFalse;
 import game.StringUtilities;
 
 public class StringUtilitiesTest {
+  @Test
+  public void testSanitize() {
+    String userInput = "  jfj akdkfk s   this \r\n \t rawrcakes OMG   YES Yus\n";
+    assertEquals("string not sanitized properly", "jfj akdkfk s this rawrcakes omg yes yus", StringUtilities.sanitize(userInput));
+  }
+
+  @Test
+  public void testMatch() {
+    String regex = "this.*";
+    String userInput = "this is";
+    assertTrue(StringUtilities.match(regex, userInput));
+  }
 
   @Test
   public void testCompareEmpty() {

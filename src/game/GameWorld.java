@@ -8,6 +8,9 @@ import net.datastructures.Graph;
 import net.datastructures.Vertex;
 import net.datastructures.Edge;
 import net.datastructures.AdjacencyMapGraph;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * This class represents a room in the game. A room is a collection of
  * rooms.
@@ -16,7 +19,7 @@ public class GameWorld extends GameObject {
   private String name;
   private String description;
   private List<Character> characters;
-  // a room could have portals in it that are one-way
+  // a room could have transitions in it that are one-way
   private Graph<Location, Transition> g = new AdjacencyMapGraph<>(true);
 
   /**
@@ -25,10 +28,42 @@ public class GameWorld extends GameObject {
    * @param name the name of the area
    * @param description the description of the area
    */
-
    public GameWorld(String name, String description) {
      super(name, description);
      characters = new ArrayList<>();
+   }
+
+   @JsonIgnore
+   public Vertex<Location>[] getLocations() {
+     Iterable<Vertex<Location>> it = g.vertices();
+     Vertex<Location>[] verts = (Vertex<Location>[]) new Vertex[getNumLocations()];
+     int i = 0;
+     for(Vertex<Location> v: it) {
+       verts[i++] = v;
+     }
+     return verts;
+   }
+
+   @JsonProperty(value="locations")
+   public List<Location> getLocationsAsList() {
+      Iterable<Vertex<Location>> it = g.vertices();
+      List<Location> locations = new ArrayList<>();
+      for(Vertex<Location> vert: it) {
+        locations.add(vert.getElement());
+      }
+      return locations;
+   }
+
+   public int getNumLocations() {
+     return g.numVertices();
+   }
+
+   public int getNumTransitions() {
+     return g.numEdges();
+   }
+
+   public int getNumExits(Vertex<Location> vert) {
+     return outDegree(vert);
    }
 
    /**
@@ -42,11 +77,11 @@ public class GameWorld extends GameObject {
    }
 
    /**
-    * Inserts a portal in between two locations.
+    * Inserts a transition in between two locations.
     *
     * @param a a vertex containing a location
     * @param b a vertex containing a location
-    * @param p the portal that goes from location a to location b (one
+    * @param p the transition that goes from location a to location b (one
     * direction)
     */
    public Edge<Transition> insertTransition(Vertex<Location> a, Vertex<Location> b, Transition t) {
@@ -73,7 +108,7 @@ public class GameWorld extends GameObject {
     * This method should get an array of all vertices that have edges outgoing
     * from the given vertex.
     */
-   public Vertex<Location>[] outGoingVertices(Vertex<Location> v) {
+   public Vertex<Location>[] outGoingLocations(Vertex<Location> v) {
      Vertex<Location>[] verts = (Vertex<Location>[]) new Vertex[g.outDegree(v)];
 
      int i = 0;

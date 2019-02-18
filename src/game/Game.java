@@ -9,6 +9,8 @@ import net.datastructures.AdjacencyMapGraph;
 import net.datastructures.Vertex;
 import net.datastructures.Edge;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 /**
  * This class should encapsulate the whole game engine.
  */
@@ -16,44 +18,54 @@ public class Game {
   // the gameworld this game refers to
   private GameWorld gw;
   // game needs a reference to the player
-  private Player p;
-  // a game needs a GameCommands instance
-  private GameCommands gcs = new GameCommands();
+  private Player player;
   /**
    * Construct a new game object.
    *
    * @param startLocation the starting location for the player in the game
    */
-  public Game() {
+  /*public Game() {
     setupGameWorld();
+  }*/
+  public enum Actions { EXIT };
+
+  public Game(GameWorld gw) {
+    this.gw = gw;
+    player = new Player("TestPlayer", gw.getLocations()[0]);
   }
 
-  /*
-  private void move(Character c, Location l) {
+  private void move(Character c, Vertex<Location> l) {
     c.setLocation(l);
-  }*/
+  }
 
   /**
    * the game should decide what to do with the user input here
    */
-  public String sendCommand(String cmd) {
-    Command.Actions action = gcs.getCommandAction(cmd);
-
-    switch(action) {
-      case MOVE:
-        return move(cmd);
-      case VIEW:
-        return view(cmd);
-      case EXITS:
-        return exits();
-      case OBJECTS:
-        return objects();
-      case QUIT:
-        System.out.println("Thanks for playing!");
-        System.exit(0);
-      default:
-        return "that command is not recognized";
+  public String sendInput(String input) {
+    String response = "That doesn't make any sense.";
+    if(input.length() > 0) {
+      try {
+        if(StringUtilities.match("(.*(quit)|(exit)|(stop).*)|q", input)) {
+          return "QUIT";
+        }
+        else if(StringUtilities.match(".*(view)|(look).*", input)) {
+          response = StringUtilities.json(player.getLocation().getElement());
+        }
+        else if(StringUtilities.match(".*exits.*", input)) {
+          response = exits();
+        }
+        else if(StringUtilities.match(".*move.*", input)) {
+          response = move(input);
+        }
+      }
+      catch(JsonProcessingException jpe) {
+        response = jpe.getMessage();
+      }
     }
+    else {
+      response = "Please enter some text to proceed.";
+    }
+    return StringUtilities.plainGameOutput(response, 80);
   }
 
   /*public static int indexOfObjectByName(String[] words, Location loc) {
@@ -68,7 +80,7 @@ public class Game {
   }*/
 
   public Vertex<Location> determineMoveLocation(String cmd) {
-    Vertex<Location>[] outVerts = gw.outGoingVertices(p.getLocation());
+    Vertex<Location>[] outVerts = gw.outGoingLocations(player.getLocation());
     Vertex<Location> moveVert = null;
     for(Vertex<Location> v: outVerts) {
       Location l = v.getElement();
@@ -83,8 +95,8 @@ public class Game {
   public String moveString(Vertex<Location> moveVert) {
     StringBuilder sb = new StringBuilder();
 
-    Edge<Transition> edge = gw.getEdge(p.getLocation(), moveVert);
-    p.setLocation(moveVert);
+    Edge<Transition> edge = gw.getEdge(player.getLocation(), moveVert);
+    player.setLocation(moveVert);
     // get the location that the player wants to move to
     Location loc = moveVert.getElement();
     Transition t = edge.getElement();
@@ -112,7 +124,7 @@ public class Game {
     String[] words = cmd.split("\\s+");
     // try to determine if it's the location description or
     // an object description that the player wants
-    Location l = p.getLocation().getElement();
+    Location l = player.getLocation().getElement();
     List<GameObject> locationObjects = l.getGameObjects();
     for(String word: words) {
       for(GameObject go: locationObjects) {
@@ -130,7 +142,7 @@ public class Game {
     StringBuilder exitList = new StringBuilder("List of exits:\n");
 
     int i = 0;
-    Vertex<Location>[] outVertices = gw.outGoingVertices(p.getLocation());
+    Vertex<Location>[] outVertices = gw.outGoingLocations(player.getLocation());
 
     for(Vertex<Location> v: outVertices) {
       if(i != outVertices.length - 1) {
@@ -145,7 +157,7 @@ public class Game {
   }
 
   public String objects() {
-    Location l = p.getLocation().getElement();
+    Location l = player.getLocation().getElement();
     ArrayList<GameObject> locationObjects = l.getGameObjects();
     if(locationObjects.size() != 0) {
       StringBuilder objectList = new StringBuilder();
@@ -186,7 +198,7 @@ public class Game {
     Vertex<Location> v2 = gw.insertLocation(hallway);
     Vertex<Location> v3 = gw.insertLocation(livingRoom);
 
-    p = new Player("Kelan", v2);
+    player = new Player("Kelan", v2);
 
     gw.insertTransition(v1, v2, t1);
     gw.insertTransition(v2, v1, t2);

@@ -8,7 +8,7 @@ import game.GameCommands;
 import game.Command;
 
 public class GameCommandsTest {
-  private static GameCommands gcs = new GameCommands();
+  /*private static GameCommands gcs = new GameCommands();
 
 
   @Test
@@ -121,5 +121,5 @@ public class GameCommandsTest {
     Command.Actions expected = Command.Actions.OBJECTS;
     Command.Actions actual = gcs.getCommandAction(cmd);
     assertEquals(expected, actual);
-  }
+  }*/
 }

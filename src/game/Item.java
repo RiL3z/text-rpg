@@ -1,10 +1,15 @@
 package game;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Class represents a generic item in the game.
  */
 public class Item extends GameObject {
-  public Item(String name, String description) {
+
+  @JsonCreator
+  public Item(@JsonProperty("name") String name, @JsonProperty("description") String description) {
     super(name, description);
   }
 

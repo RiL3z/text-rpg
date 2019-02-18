@@ -45,8 +45,8 @@ public class Character {
   }
 
   // pick up an item and add it to the inventory of the character
-  public void pickUpItem(String itemName) {
-
+  public void pickUpItem(Item item) {
+    this.inventory.addItem(item);
   }
 
 }

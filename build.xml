@@ -1,5 +1,5 @@
 <!-- Build file for text-rpg -->
-<project name="text-rpg" basedir="." default="compile">
+<project name="text-rpg" basedir="." default="compile-game">
   <description>
     This is the ant file used to build and test the rpg application that I'm developing.
   </description>
@@ -17,9 +17,19 @@
   <property name="data-structures" value="data-structures.jar"/>
   <property name="hamcrest" value="hamcrest-core-1.3.jar"/>
   <property name="junit" value="junit-4.12.jar"/>
+  <property name="jackson-annotations" value="jackson-annotations-2.9.0.jar"/>
+  <property name="jackson-core" value="jackson-core-2.9.0.jar"/>
+  <property name="jackson-databind" value="jackson-databind-2.9.0.jar"/>
+  <property name="snakeyaml" value="snakeyaml-1.17.jar"/>
+  <property name="jackson-dataformat-yaml" value="jackson-dataformat-yaml-2.9.0.jar"/>
   <property name="data-lib" location="${lib}/${data-structures}"/>
   <property name="ham-lib" location="${lib}/${hamcrest}"/>
   <property name="test-lib" location="${lib}/${junit}"/>
+  <property name="jackson-databind-lib" location="${lib}/${jackson-databind}"/>
+  <property name="jackson-core-lib" location="${lib}/${jackson-core}"/>
+  <property name="jackson-annotations-lib" location="${lib}/${jackson-annotations}"/>
+  <property name="snakeyaml-lib" location="${lib}/${snakeyaml}"/>
+  <property name="jackson-dataformat-yaml-lib" location="${lib}/${jackson-dataformat-yaml}"/>
   <!-- The name that the jar should have. -->
   <property name="jar-name" value="RPG.jar"/>
   <property name="jar-path" location="${jar}/${jar-name}"/>
@@ -29,7 +39,7 @@
   <!-- Basic compile target. -->
   <target name="compile-game">
     <mkdir dir="${game-classes}"/>
-    <javac includeantruntime="false" srcdir="${game-src}" destdir="${game-classes}" classpath="${data-lib}">
+    <javac includeantruntime="false" srcdir="${game-src}" destdir="${game-classes}" classpath="${data-lib}:${jackson-databind-lib}:${jackson-core-lib}:${jackson-annotations-lib}:${snakeyaml-lib}:${jackson-dataformat-yaml-lib}">
       <compilerarg value="-Xlint:unchecked"/>
     </javac>
   </target>
@@ -55,6 +65,12 @@
     <jar destfile="${jar-path}" manifest="manifest.mf">
       <fileset dir="${game-classes}"/>
       <zipfileset src="${data-lib}"/>
+      <zipfileset src="${jackson-core-lib}"/>
+      <zipfileset src="${jackson-annotations-lib}"/>
+      <zipfileset src="${jackson-databind-lib}"/>
+      <zipfileset src="${snakeyaml-lib}"/>
+      <zipfileset src="${jackson-dataformat-yaml-lib}"/>
+      <fileset dir="resources"/>
     </jar>
   </target>
 
@@ -62,12 +78,6 @@
   <target name="dist-linux" depends="jar">
     <copy file="${jar-path}" todir="${dist-linux}"/>
   </target>
-
-  <!-- NEED TO FIX AT SOME POINT
-  <target name="run-game" depends="jar">
-    <java jar="${jar}/${jar-name}"/>
-  </target>
-  -->
 
   <!-- Basic clean target. -->
   <target name="clean">

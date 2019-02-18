@@ -73,4 +73,8 @@ public class Location extends GameObject {
     }
     return null;
   }
+
+  public String toString() {
+    return String.format("harhar");
+  }
 }
